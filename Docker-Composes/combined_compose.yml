@@ -1,0 +1,123 @@
+version: "3.7"
+
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent_solo_pia
+    network_mode: "container:gluetun_solo_pia"
+    environment:
+      - PUID=1000
+      - PGID=1003
+      - TZ=Europe/London
+      - WEBUI_PORT=9797
+    volumes:
+      - /home/pi/.config/qbitorrent:/config
+      - /mnt/usbstorage:/mnt/usbstorage
+    restart: unless-stopped
+
+  prowlarr:
+    container_name: prowlarr
+    image: cr.hotio.dev/hotio/prowlarr:testing
+    ports:
+      - "9696:9696"
+    environment:
+      - PUID=995
+      - PGID=1004
+      - UMASK=002
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/prowlarr/:/config
+    restart: unless-stopped
+
+  lidarr:
+    container_name: lidarr
+    image: cr.hotio.dev/hotio/lidarr:nightly
+    ports:
+      - "8686:8686"
+    environment:
+      - PUID=998
+      - PGID=1004
+      - UMASK=002
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/lidarr/:/config
+      - /mnt/usbstorage/music:/mnt/usbstorage/music
+      - /mnt/usbstorage/download/complete/LidarrMusic:/mnt/usbstorage/download/complete/LidarrMusic
+    restart: unless-stopped
+
+  sonarr:
+    container_name: sonarr
+    image: cr.hotio.dev/hotio/sonarr
+    ports:
+      - "8989:8989"
+    environment:
+      - PUID=115
+      - PGID=1004
+      - UMASK=002
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/sonarr/:/config
+      - /mnt/usbstorage/tv:/mnt/usbstorage/tv
+      - /mnt/usbstorage/download/complete/SonarrTv:/mnt/usbstorage/download/complete/SonarrTv
+    restart: unless-stopped
+
+  radarr:
+    container_name: radarr
+    image: cr.hotio.dev/hotio/radarr:testing
+    ports:
+      - "7878:7878"
+    environment:
+      - PUID=997
+      - PGID=1004
+      - UMASK=002
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/radarr/:/config
+      - /mnt/usbstorage/movies:/mnt/usbstorage/movies
+      - /mnt/usbstorage/download/complete/RadarrMovies:/mnt/usbstorage/download/complete/RadarrMovies
+    restart: unless-stopped
+
+  readarr:
+    container_name: readarr
+    image: cr.hotio.dev/hotio/readarr:testing
+    ports:
+      - "8787:8787"
+    environment:
+      - PUID=996
+      - PGID=1004
+      - UMASK=002
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/readarr:/config
+      - /mnt/usbstorage/ebooks:/mnt/usbstorage/ebooks
+      - /mnt/usbstorage/download/complete/ReadarrBooks:/mnt/usbstorage/download/complete/ReadarrBooks
+    restart: unless-stopped
+
+  readarr_audio:
+    container_name: readarr_audio
+    image: cr.hotio.dev/hotio/readarr:testing
+    ports:
+      - "9393:8787"
+    environment:
+      - PUID=996
+      - PGID=1004
+      - UMASK=002
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/readarr_audio:/config
+      - /mnt/usbstorage/audiobooks:/mnt/usbstorage/audiobooks
+      - /mnt/usbstorage/download/complete/ReadarrAudio:/mnt/usbstorage/download/complete/ReadarrAudio
+    restart: unless-stopped
+
+  flaresolverr:
+    # DockerHub mirror flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_HTML=${LOG_HTML:-false}
+      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
+      - TZ=Europe/London
+    ports:
+      - "${PORT:-8191}:8191"
+    restart: unless-stopped

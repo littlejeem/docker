@@ -1,0 +1,21 @@
+#stored in qbittorrent config folder called categories.json
+{
+    "SonarrTv": {
+        "save_path": "/test/usbstorage/downloads/complete/SonarrTv"
+    },
+    "LidarrMusic": {
+        "save_path": "/test/usbstorage/downloads/complete/LidarrMusic"
+    },
+    "ReadarrBooks": {
+        "save_path": "/test/usbstorage/downloads/complete/ReadarrBooks"
+    },
+    "ReadarrAudio": {
+        "save_path": "/test/usbstorage/downloads/complete/ReadarrAudio"
+    },
+    "RadarrMovies": {
+        "save_path": "/test/usbstorage/downloads/complete/RadarrMovies"
+    },
+    "Software": {
+        "save_path": "/test/usbstorage/downloads/complete/Software"
+    }
+}
